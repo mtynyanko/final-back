@@ -3,15 +3,20 @@ import {
   Column,
   Model,
   AllowNull,
-  HasMany,
+  BelongsToMany,
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
 
-import { Tag } from 'src/tags/tag.model';
-import { User } from 'src/users/user.model';
+import { TagPost } from 'src/modules/posts/models/tag-post.model';
+import { Tag } from 'src/modules/posts/models/tag.model';
+import { User } from 'src/modules/users/user.model';
 
-@Table
+@Table({
+  tableName: 'Posts',
+  underscored: true,
+  timestamps: true,
+})
 export class Post extends Model {
   @AllowNull(false)
   @Column
@@ -23,32 +28,16 @@ export class Post extends Model {
 
   @AllowNull(false)
   @Column
-  imageURL: string;
+  imageUrl: string;
 
   @AllowNull(false)
   @ForeignKey(() => User)
   @Column
   authorId: number;
 
-  @AllowNull(false)
   @BelongsTo(() => User)
-  @Column
   author: User;
 
-  @AllowNull(false)
-  @HasMany(() => Tag)
-  @Column
+  @BelongsToMany(() => Tag, () => TagPost)
   tags: Tag[];
-
-  @AllowNull(false)
-  @Column({
-    defaultValue: new Date(),
-  })
-  createdAt: Date;
-
-  @AllowNull(false)
-  @Column({
-    defaultValue: new Date(),
-  })
-  updatedAt: Date;
 }

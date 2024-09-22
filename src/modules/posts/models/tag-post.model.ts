@@ -6,10 +6,14 @@ import {
   ForeignKey,
 } from 'sequelize-typescript';
 
-import { Tag } from 'src/tags/tag.model';
-import { Post } from 'src/posts/post.model';
+import { Tag } from 'src/modules/posts/models/tag.model';
+import { Post } from 'src/modules/posts/models/post.model';
 
-@Table
+@Table({
+  tableName: 'TagsPosts',
+  underscored: true,
+  timestamps: true,
+})
 export class TagPost extends Model {
   @AllowNull(false)
   @ForeignKey(() => Post)
